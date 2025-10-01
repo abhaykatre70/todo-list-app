@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List App</title>
+    <title>Advanced To-Do List App</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
     <div class="app-container">
         <div class="header">
             <h1>✨ Smart To-Do List</h1>
-            <p>Organize your tasks efficiently</p>
+            <p>Organize your tasks efficiently with priorities, categories, and deadlines</p>
         </div>
 
         <div class="main-card">
-            <!-- Statistics Dashboard -->
+            <!-- Statistics -->
             <div class="stats-container">
                 <div class="stat-card">
                     <h3 id="totalTasks">0</h3>
@@ -38,8 +36,25 @@
                     <input type="text" id="taskInput" placeholder="What needs to be done?">
                     <button id="addBtn">Add Task</button>
                 </div>
+                <div class="options-row">
+                    <select id="prioritySelect">
+                        <option value="low">Low Priority</option>
+                        <option value="medium" selected>Medium Priority</option>
+                        <option value="high">High Priority</option>
+                    </select>
+                    <select id="categorySelect">
+                        <option value="Personal">Personal</option>
+                        <option value="Work">Work</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Health">Health</option>
+                        <option value="Study">Study</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input type="date" id="dueDateInput">
+                </div>
             </div>
-                        <!-- Filters -->
+
+            <!-- Filters -->
             <div class="filters">
                 <button class="filter-btn active" data-filter="all">All Tasks</button>
                 <button class="filter-btn" data-filter="pending">Pending</button>
@@ -48,6 +63,7 @@
                 <button class="filter-btn" data-filter="week">This Week</button>
                 <button class="filter-btn" data-filter="high">High Priority</button>
             </div>
+
             <!-- Task List -->
             <ul id="taskList">
                 <div class="empty-state">
@@ -56,13 +72,9 @@
                     <p>Add your first task to get started</p>
                 </div>
             </ul>
-            <div class="content-placeholder">
-                <p>Task input section coming soon...</p>
-            </div>
         </div>
     </div>
 
     <script src="script.js"></script>
 </body>
-
 </html>

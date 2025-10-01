@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     padding: 20px;
@@ -28,12 +28,18 @@ body {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
+.header p {
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
 .main-card {
     background: white;
     border-radius: 20px;
     padding: 30px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
+
 .stats-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -60,56 +66,6 @@ body {
     opacity: 0.9;
 }
 
-.content-placeholder {
-    text-align: center;
-    padding: 40px;
-    color: #666;
-}
-.input-section {
-    background: #f8f9fa;
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-}
-
-.input-row {
-    display: flex;
-    gap: 10px;
-}
-
-#taskInput {
-    flex: 1;
-    padding: 15px;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    font-size: 16px;
-}
-
-#addBtn {
-    padding: 15px 30px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.input-section {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.input-section {
-    background: #f8f9fa;
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-}
-
 .input-section {
     background: #f8f9fa;
     padding: 25px;
@@ -129,16 +85,13 @@ body {
     border: 2px solid #e0e0e0;
     border-radius: 10px;
     font-size: 16px;
+    transition: all 0.3s;
 }
 
-#addBtn {
-    padding: 15px 30px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 16px;
+#taskInput:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .options-row {
@@ -153,7 +106,62 @@ select, input[type="date"] {
     border-radius: 10px;
     font-size: 14px;
     background: white;
+    cursor: pointer;
+    transition: all 0.3s;
 }
+
+select:focus, input[type="date"]:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+#addBtn {
+    padding: 15px 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+#addBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(102, 126, 234, 0.5);
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 10px 20px;
+    border: 2px solid #e0e0e0;
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.filter-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.filter-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
+}
+
 #taskList {
     list-style: none;
     display: flex;
@@ -168,19 +176,36 @@ select, input[type="date"] {
     display: flex;
     align-items: center;
     gap: 15px;
+    transition: all 0.3s;
     border-left: 5px solid #667eea;
+    animation: slideIn 0.3s ease-out;
 }
 
-.empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: #999;
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
-.empty-state-icon {
-    font-size: 4em;
-    margin-bottom: 20px;
+.task-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
+
+.task-item.completed {
+    opacity: 0.6;
+    border-left-color: #95a5a6;
+}
+
+.task-item.completed .task-text {
+    text-decoration: line-through;
+}
+
 .checkbox {
     width: 24px;
     height: 24px;
@@ -191,6 +216,12 @@ select, input[type="date"] {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    transition: all 0.3s;
+}
+
+.checkbox:hover {
+    background: #667eea;
+    transform: scale(1.1);
 }
 
 .checkbox.checked {
@@ -219,6 +250,12 @@ select, input[type="date"] {
     gap: 15px;
     font-size: 13px;
     color: #666;
+}
+
+.task-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .priority-badge {
@@ -253,42 +290,6 @@ select, input[type="date"] {
     color: #555;
 }
 
-.delete-btn {
-    background: #ff4757;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.task-item.completed .task-text {
-    text-decoration: line-through;
-    opacity: 0.6;
-}
-.filters {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-}
-
-.filter-btn {
-    padding: 10px 20px;
-    border: 2px solid #e0e0e0;
-    background: white;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.filter-btn.active {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-color: transparent;
-}
 .task-actions {
     display: flex;
     gap: 8px;
@@ -300,6 +301,7 @@ select, input[type="date"] {
     border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
+    transition: all 0.3s;
     font-weight: 500;
 }
 
@@ -310,6 +312,7 @@ select, input[type="date"] {
 
 .edit-btn:hover {
     background: #2980b9;
+    transform: scale(1.05);
 }
 
 .delete-btn {
@@ -319,92 +322,26 @@ select, input[type="date"] {
 
 .delete-btn:hover {
     background: #ee5a6f;
-}
-/* Add these new styles */
-.task-item {
-    background: #f8f9fa;
-    border-radius: 15px;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    transition: all 0.3s;
-    border-left: 5px solid #667eea;
-    animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.task-item:hover {
-    transform: translateX(5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.task-item.completed {
-    opacity: 0.6;
-    border-left-color: #95a5a6;
-}
-
-#taskInput:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-select:focus, input[type="date"]:focus {
-    outline: none;
-    border-color: #667eea;
-}
-
-#addBtn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 7px 20px rgba(102, 126, 234, 0.5);
-}
-
-#addBtn:active {
-    transform: translateY(0);
-}
-
-.checkbox:hover {
-    background: #667eea;
-    transform: scale(1.1);
-}
-
-.action-btn {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.3s;
-    font-weight: 500;
-}
-
-.edit-btn:hover {
-    background: #2980b9;
     transform: scale(1.05);
 }
 
-.delete-btn:hover {
-    background: #ee5a6f;
-    transform: scale(1.05);
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
 }
 
-.filter-btn:hover {
-    border-color: #667eea;
-    color: #667eea;
+.empty-state-icon {
+    font-size: 4em;
+    margin-bottom: 20px;
 }
 
-/* Responsive Design */
+.empty-state h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #666;
+}
+
 @media (max-width: 600px) {
     .header h1 {
         font-size: 2em;

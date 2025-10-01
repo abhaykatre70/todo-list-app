@@ -16,7 +16,7 @@ dueDateInput.min = new Date().toISOString().split('T')[0];
 // Add Task Function
 function addTask() {
     const taskText = taskInput.value.trim();
-    
+
     if (taskText === '') {
         alert('Please enter a task!');
         return;
@@ -31,7 +31,7 @@ function addTask() {
         dueDate: dueDateInput.value,
         createdAt: new Date()
     };
-    
+
     tasks.push(task);
 
     // Reset form
@@ -39,7 +39,7 @@ function addTask() {
     dueDateInput.value = '';
     prioritySelect.value = 'medium';
     categorySelect.value = 'Personal';
-    
+
     renderTasks();
     updateStats();
 }
@@ -49,6 +49,104 @@ function deleteTask(id) {
     tasks = tasks.filter(task => task.id !== id);
     renderTasks();
     updateStats();
+}
+// Add this after deleteTask function
+function editTask(id) {
+    const task = tasks.find(t => t.id === id);
+    taskInput.value = task.text;
+    prioritySelect.value = task.priority;
+    categorySelect.value = task.category;
+    dueDateInput.value = task.dueDate;
+    editingTaskId = id;
+    addBtn.textContent = 'Update Task';
+    taskInput.focus();
+}
+
+// Update addTask to handle editing
+function addTask() {
+    const taskText = taskInput.value.trim();
+
+    if (taskText === '') {
+        alert('Please enter a task!');
+        return;
+    }
+
+    if (editingTaskId !== null) {
+        const task = tasks.find(t => t.id === editingTaskId);
+        task.text = taskText;
+        task.priority = prioritySelect.value;
+        task.category = categorySelect.value;
+        task.dueDate = dueDateInput.value;
+        editingTaskId = null;
+        addBtn.textContent = 'Add Task';
+    } else {
+        const task = {
+            id: Date.now(),
+            text: taskText,
+            completed: false,
+            priority: prioritySelect.value,
+            category: categorySelect.value,
+            dueDate: dueDateInput.value,
+            createdAt: new Date()
+        };
+        tasks.push(task);
+    }
+
+    taskInput.value = '';
+    dueDateInput.value = '';
+    prioritySelect.value = 'medium';
+    categorySelect.value = 'Personal';
+
+    renderTasks();
+    updateStats();
+}
+
+// Add date formatting function
+function formatDate(dateString) {
+    if (!dateString) return 'No deadline';
+    const date = new Date(dateString);
+    const today = new Date();
+    const diffTime = date - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return '📅 Today';
+    if (diffDays === 1) return '📅 Tomorrow';
+    if (diffDays < 0) return '📅 Overdue';
+    if (diffDays <= 7) return `📅 In ${diffDays} days`;
+    return `📅 ${date.toLocaleDateString()}`;
+}
+
+// Update renderTasks to include date and edit button
+function renderTasks() {
+    const filteredTasks = filterTasks(currentFilter);
+
+    if (filteredTasks.length === 0) {
+        taskList.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">📝</div>
+                <h3>No tasks found!</h3><p>${currentFilter === 'all' ? 'Add your first task to get started' : 'Try a different filter'}</p>
+            </div>
+        `;
+        return;
+    }
+
+    taskList.innerHTML = filteredTasks.map(task => `
+        <li class="task-item ${task.completed ? 'completed' : ''}">
+            <div class="checkbox ${task.completed ? 'checked' : ''}" onclick="toggleComplete(${task.id})"></div>
+            <div class="task-content">
+                <div class="task-text">${task.text}</div>
+                <div class="task-meta">
+                    <span class="priority-badge priority-${task.priority}">${task.priority}</span>
+                    <span class="category-badge">${task.category}</span>
+                    <span>${formatDate(task.dueDate)}</span>
+                </div>
+            </div>
+            <div class="task-actions">
+                <button class="action-btn edit-btn" onclick="editTask(${task.id})">Edit</button>
+                <button class="action-btn delete-btn" onclick="deleteTask(${task.id})">Delete</button>
+            </div>
+        </li>
+    `).join('');
 }
 
 // Toggle Complete
@@ -115,7 +213,7 @@ function filterTasks(filter) {
     currentFilter = filter;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     const weekFromNow = new Date(today);
     weekFromNow.setDate(weekFromNow.getDate() + 7);
 
@@ -141,7 +239,7 @@ function filterTasks(filter) {
 // Update renderTasks to use filter
 function renderTasks() {
     const filteredTasks = filterTasks(currentFilter);
-    
+
     if (filteredTasks.length === 0) {
         taskList.innerHTML = `
             <div class="empty-state">

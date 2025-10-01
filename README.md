@@ -13,9 +13,9 @@
 
 <h3>A modern task management app with priorities, categories, and smart filtering</h3>
 
-<a href="https://abhaykatre70.github.io/todo-list-app/"><strong>🚀 Live Demo</strong></a>
+🚀<a href="https://abhaykatre70.github.io/todo-list-app/"><strong>Live Demo</strong></a>
 
-<sub>⚠️ Deployment link will be updated after GitHub Pages setup</sub>
+
 
 </div>
 

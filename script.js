@@ -107,3 +107,73 @@ taskInput.addEventListener('keypress', (e) => {
 // Initial render
 renderTasks();
 updateStats();
+const filterBtns = document.querySelectorAll('.filter-btn');
+let currentFilter = 'all';
+
+// Filter Tasks Function
+function filterTasks(filter) {
+    currentFilter = filter;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const weekFromNow = new Date(today);
+    weekFromNow.setDate(weekFromNow.getDate() + 7);
+
+    return tasks.filter(task => {
+        if (filter === 'all') return true;
+        if (filter === 'pending') return !task.completed;
+        if (filter === 'completed') return task.completed;
+        if (filter === 'high') return task.priority === 'high';
+        if (filter === 'today') {
+            if (!task.dueDate) return false;
+            const dueDate = new Date(task.dueDate);
+            return dueDate.toDateString() === today.toDateString();
+        }
+        if (filter === 'week') {
+            if (!task.dueDate) return false;
+            const dueDate = new Date(task.dueDate);
+            return dueDate >= today && dueDate <= weekFromNow;
+        }
+        return true;
+    });
+}
+
+// Update renderTasks to use filter
+function renderTasks() {
+    const filteredTasks = filterTasks(currentFilter);
+    
+    if (filteredTasks.length === 0) {
+        taskList.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">📝</div>
+                <h3>No tasks found!</h3>
+                <p>${currentFilter === 'all' ? 'Add your first task to get started' : 'Try a different filter'}</p>
+            </div>
+        `;
+        return;
+    }
+
+    taskList.innerHTML = filteredTasks.map(task => `
+        <li class="task-item ${task.completed ? 'completed' : ''}">
+            <div class="checkbox ${task.completed ? 'checked' : ''}" onclick="toggleComplete(${task.id})"></div>
+            <div class="task-content">
+                <div class="task-text">${task.text}</div>
+                <div class="task-meta">
+                    <span class="priority-badge priority-${task.priority}">${task.priority}</span>
+                    <span class="category-badge">${task.category}</span>
+                </div>
+            </div>
+            <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
+        </li>
+    `).join('');
+}
+
+// Filter event listeners
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderTasks();
+    });
+});

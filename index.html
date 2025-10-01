@@ -31,12 +31,22 @@
                     <p>Pending</p>
                 </div>
             </div>
+
             <!-- Input Section -->
             <div class="input-section">
                 <div class="input-row">
                     <input type="text" id="taskInput" placeholder="What needs to be done?">
                     <button id="addBtn">Add Task</button>
                 </div>
+            </div>
+                        <!-- Filters -->
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All Tasks</button>
+                <button class="filter-btn" data-filter="pending">Pending</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+                <button class="filter-btn" data-filter="today">Due Today</button>
+                <button class="filter-btn" data-filter="week">This Week</button>
+                <button class="filter-btn" data-filter="high">High Priority</button>
             </div>
             <!-- Task List -->
             <ul id="taskList">

@@ -1,0 +1,86 @@
+To-Do List App - Analysis (Version 1)
+-------------------------------------
+
+Team Members:
+1. Abhay Katre
+2. Keshav
+
+Project Objective:
+The goal of this project is to build a To-Do List Web Application and to demonstrate
+a proper collaborative GitHub workflow between two contributors.
+
+-------------------------------------
+1. Roles and Responsibilities
+-------------------------------------
+
+Abhay Katre:
+- Responsible for frontend design and layout.
+- Created the HTML structure and CSS styling.
+- Managed overall UI responsiveness.
+- Setup project repository and initial deployment (Version 1).
+- Will handle documentation and report creation.
+
+Keshav:
+- Responsible for functionality and interactivity using JavaScript.
+- Implemented Add, Edit, and Delete task functions.
+- Worked on logic testing and debugging.
+- Will implement task persistence using Local Storage in Version 2.
+- Will handle pull request reviews and branch management.
+
+-------------------------------------
+2. Version 1 (Current Progress)
+-------------------------------------
+
+✅ HTML, CSS, and JavaScript integration completed.
+✅ Tasks can be added, edited, and deleted.
+✅ Project hosted on GitHub Pages (Version 1 Deployment).
+✅ Git and GitHub used for collaboration between two members.
+
+-------------------------------------
+3. Problems Faced
+-------------------------------------
+
+- Multiple branches were created during setup and testing.
+- Some branches deleted before merging caused loss of small changes.
+- Direct commits made to main branch initially.
+- Branch naming not standardized.
+
+(These helped us understand why following a structured Git workflow is important.)
+
+-------------------------------------
+4. Future Implementation Plan
+-------------------------------------
+
+Abhay (Frontend):
+- Improve responsive UI and add theme switch (light/dark mode).
+- Add user-friendly icons and animations.
+- Update documentation and README with workflow diagrams.
+
+Keshav (Backend/Logic):
+- Implement local storage for saving tasks permanently.
+- Add task completion status (strike-through / completed).
+- Add filters for completed/pending tasks.
+
+Joint Tasks:
+- Maintain proper Git branching structure.
+- Use pull requests for merging.
+- Test and deploy Version 2 with all features integrated.
+
+-------------------------------------
+5. Workflow Model (Simplified)
+-------------------------------------
+
+            main
+             │
+   ┌─────────┴──────────┐
+   │                    │
+abhay/ui          keshav/js
+   │                    │
+   └─────────┬──────────┘
+             │
+            main
+        (final merge)
+
+-------------------------------------
+End of Version 1 Analysis
+-------------------------------------

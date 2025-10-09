@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced To-Do List App</title>
+    <meta name="description" content="Smart To-Do List App - Organize your tasks efficiently with priorities, categories, and deadlines">
+    <meta name="author" content="Abhay Katre & Keshav">
+    <title>Smart To-Do List App</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,7 +16,7 @@
         </div>
 
         <div class="main-card">
-            <!-- Statistics -->
+            <!-- Statistics Dashboard -->
             <div class="stats-container">
                 <div class="stat-card">
                     <h3 id="totalTasks">0</h3>
@@ -33,16 +35,23 @@
             <!-- Input Section -->
             <div class="input-section">
                 <div class="input-row">
-                    <input type="text" id="taskInput" placeholder="What needs to be done?">
-                    <button id="addBtn">Add Task</button>
+                    <input 
+                        type="text" 
+                        id="taskInput" 
+                        placeholder="What needs to be done?"
+                        aria-label="Task input"
+                        autocomplete="off"
+                        maxlength="200"
+                    >
+                    <button id="addBtn" aria-label="Add new task">Add Task</button>
                 </div>
                 <div class="options-row">
-                    <select id="prioritySelect">
+                    <select id="prioritySelect" aria-label="Select priority level">
                         <option value="low">Low Priority</option>
                         <option value="medium" selected>Medium Priority</option>
                         <option value="high">High Priority</option>
                     </select>
-                    <select id="categorySelect">
+                    <select id="categorySelect" aria-label="Select task category">
                         <option value="Personal">Personal</option>
                         <option value="Work">Work</option>
                         <option value="Shopping">Shopping</option>
@@ -50,22 +59,26 @@
                         <option value="Study">Study</option>
                         <option value="Other">Other</option>
                     </select>
-                    <input type="date" id="dueDateInput">
+                    <input 
+                        type="date" 
+                        id="dueDateInput"
+                        aria-label="Select due date"
+                    >
                 </div>
             </div>
 
-            <!-- Filters -->
+            <!-- Filter Buttons -->
             <div class="filters">
-                <button class="filter-btn active" data-filter="all">All Tasks</button>
-                <button class="filter-btn" data-filter="pending">Pending</button>
-                <button class="filter-btn" data-filter="completed">Completed</button>
-                <button class="filter-btn" data-filter="today">Due Today</button>
-                <button class="filter-btn" data-filter="week">This Week</button>
-                <button class="filter-btn" data-filter="high">High Priority</button>
+                <button class="filter-btn active" data-filter="all" aria-label="Show all tasks">All Tasks</button>
+                <button class="filter-btn" data-filter="pending" aria-label="Show pending tasks">Pending</button>
+                <button class="filter-btn" data-filter="completed" aria-label="Show completed tasks">Completed</button>
+                <button class="filter-btn" data-filter="today" aria-label="Show tasks due today">Due Today</button>
+                <button class="filter-btn" data-filter="week" aria-label="Show tasks due this week">This Week</button>
+                <button class="filter-btn" data-filter="high" aria-label="Show high priority tasks">High Priority</button>
             </div>
 
             <!-- Task List -->
-            <ul id="taskList">
+            <ul id="taskList" role="list" aria-label="Task list">
                 <div class="empty-state">
                     <div class="empty-state-icon">📝</div>
                     <h3>No tasks yet!</h3>

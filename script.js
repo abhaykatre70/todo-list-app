@@ -15,6 +15,22 @@ let editingTaskId = null;
 // Set minimum date to today
 dueDateInput.min = new Date().toISOString().split('T')[0];
 
+// Load tasks from localStorage on page load
+function loadTasks() {
+    const savedTasks = localStorage.getItem('todoTasks');
+    if (savedTasks) {
+        tasks = JSON.parse(savedTasks);
+        tasks.forEach(task => {
+            task.createdAt = new Date(task.createdAt);
+        });
+    }
+}
+
+// Save tasks to localStorage
+function saveTasks() {
+    localStorage.setItem('todoTasks', JSON.stringify(tasks));
+}
+
 // Add or Update Task Function
 function addTask() {
     const taskText = taskInput.value.trim();
@@ -25,7 +41,6 @@ function addTask() {
     }
 
     if (editingTaskId !== null) {
-        // Update existing task
         const task = tasks.find(t => t.id === editingTaskId);
         task.text = taskText;
         task.priority = prioritySelect.value;
@@ -34,7 +49,6 @@ function addTask() {
         editingTaskId = null;
         addBtn.textContent = 'Add Task';
     } else {
-        // Add new task
         const task = {
             id: Date.now(),
             text: taskText,
@@ -47,27 +61,31 @@ function addTask() {
         tasks.push(task);
     }
 
-    // Reset form
     taskInput.value = '';
     dueDateInput.value = '';
     prioritySelect.value = 'medium';
     categorySelect.value = 'Personal';
     
+    saveTasks();
     renderTasks();
     updateStats();
 }
 
 // Delete Task Function
 function deleteTask(id) {
-    tasks = tasks.filter(task => task.id !== id);
-    renderTasks();
-    updateStats();
+    if (confirm('Are you sure you want to delete this task?')) {
+        tasks = tasks.filter(task => task.id !== id);
+        saveTasks();
+        renderTasks();
+        updateStats();
+    }
 }
 
 // Toggle Task Completion
 function toggleComplete(id) {
     const task = tasks.find(task => task.id === id);
     task.completed = !task.completed;
+    saveTasks();
     renderTasks();
     updateStats();
 }
@@ -82,6 +100,7 @@ function editTask(id) {
     editingTaskId = id;
     addBtn.textContent = 'Update Task';
     taskInput.focus();
+    taskInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 // Format Date Display
@@ -95,7 +114,7 @@ function formatDate(dateString) {
 
     if (diffDays === 0) return '📅 Today';
     if (diffDays === 1) return '📅 Tomorrow';
-    if (diffDays < 0) return '📅 Overdue';
+    if (diffDays < 0) return '⚠️ Overdue';
     if (diffDays <= 7) return `📅 In ${diffDays} days`;
     return `📅 ${date.toLocaleDateString()}`;
 }
@@ -128,9 +147,33 @@ function filterTasks(filter) {
     });
 }
 
+// Sort tasks by priority and due date
+function sortTasks(tasksToSort) {
+    const priorityOrder = { high: 1, medium: 2, low: 3 };
+    
+    return tasksToSort.sort((a, b) => {
+        if (a.completed !== b.completed) {
+            return a.completed ? 1 : -1;
+        }
+        
+        if (a.priority !== b.priority) {
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+        }
+        
+        if (a.dueDate && !b.dueDate) return -1;
+        if (!a.dueDate && b.dueDate) return 1;
+        if (a.dueDate && b.dueDate) {
+            return new Date(a.dueDate) - new Date(b.dueDate);
+        }
+        
+        return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+}
+
 // Render Tasks to DOM
 function renderTasks() {
-    const filteredTasks = filterTasks(currentFilter);
+    let filteredTasks = filterTasks(currentFilter);
+    filteredTasks = sortTasks([...filteredTasks]);
     
     if (filteredTasks.length === 0) {
         taskList.innerHTML = `
@@ -147,7 +190,7 @@ function renderTasks() {
         <li class="task-item ${task.completed ? 'completed' : ''}">
             <div class="checkbox ${task.completed ? 'checked' : ''}" onclick="toggleComplete(${task.id})"></div>
             <div class="task-content">
-                <div class="task-text">${task.text}</div>
+                <div class="task-text">${escapeHtml(task.text)}</div>
                 <div class="task-meta">
                     <span class="priority-badge priority-${task.priority}">${task.priority}</span>
                     <span class="category-badge">${task.category}</span>
@@ -160,6 +203,13 @@ function renderTasks() {
             </div>
         </li>
     `).join('');
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 // Update Statistics
@@ -182,6 +232,17 @@ taskInput.addEventListener('keypress', (e) => {
     }
 });
 
+taskInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && editingTaskId !== null) {
+        editingTaskId = null;
+        addBtn.textContent = 'Add Task';
+        taskInput.value = '';
+        dueDateInput.value = '';
+        prioritySelect.value = 'medium';
+        categorySelect.value = 'Personal';
+    }
+});
+
 filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         filterBtns.forEach(b => b.classList.remove('active'));
@@ -191,6 +252,22 @@ filterBtns.forEach(btn => {
     });
 });
 
-// Initial render
+// Initialize app
+loadTasks();
 renderTasks();
 updateStats();
+
+// Auto-save every 30 seconds
+setInterval(() => {
+    if (tasks.length > 0) {
+        saveTasks();
+    }
+}, 30000);
+
+// Warn before leaving with unsaved changes
+window.addEventListener('beforeunload', (e) => {
+    if (editingTaskId !== null) {
+        e.preventDefault();
+        e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+    }
+});
